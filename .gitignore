@@ -1,0 +1,6 @@
+node_modules/
+.env
+.env.txt
+.env.*.local
+results/
+*.log
