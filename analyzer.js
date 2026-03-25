@@ -52,10 +52,27 @@ Extract and return a JSON object with these exact keys:
   });
 
   // Parse the JSON response
-  const rawText = response.content[0].text;
+  const rawText =
+    (Array.isArray(response.content)
+      ? response.content
+          .filter((part) => part?.type === "text" && typeof part?.text === "string")
+          .map((part) => part.text)
+          .join("\n")
+      : "") || response?.content?.[0]?.text || "";
   
   try {
-    const parsed = JSON.parse(rawText);
+    // Claude sometimes wraps JSON in ```json ... ``` code fences.
+    // Extract the first JSON object to make parsing resilient.
+    const cleaned = rawText
+      .trim()
+      .replace(/^```[a-zA-Z0-9]*\s*/, "")
+      .replace(/```$/s, "")
+      .trim();
+
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("AI response did not contain valid JSON object");
+
+    const parsed = JSON.parse(jsonMatch[0]);
     console.log('✅ Claude analysis complete');
     return parsed;
   } catch (e) {

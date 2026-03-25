@@ -1,12 +1,15 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#F0F4FF]">
       <Sidebar />
@@ -26,6 +29,7 @@ export default function DashboardLayout({
           </div>
           <div className="flex items-center gap-3">
             <button
+              onClick={() => router.push("/dashboard/listing-ai")}
               className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-all hover:opacity-90 active:scale-95"
               style={{ backgroundColor: "#2563EB" }}
             >

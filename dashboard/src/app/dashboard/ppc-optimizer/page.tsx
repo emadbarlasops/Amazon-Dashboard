@@ -221,6 +221,11 @@ export default function PPCOptimizerPage() {
             <p className="text-xs text-[#94A3B8] mt-0.5">Click any row to open AI bid recommendations</p>
           </div>
           <button
+            onClick={() => {
+              // Heuristic: open the most critical campaign drawer.
+              setSelected(CAMPAIGNS.find((c) => c.id === "C005") ?? null);
+              setActiveTab("bids");
+            }}
             className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white rounded-lg
                        hover:opacity-90 transition-opacity active:scale-95"
             style={{ backgroundColor: "#2563EB" }}
@@ -454,7 +459,15 @@ export default function PPCOptimizerPage() {
               </SheetBody>
 
               <SheetFooter>
-                <Button variant="primary" size="md" className="flex-1">
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="flex-1"
+                  onClick={() => {
+                    // Front-end only demo: close the drawer.
+                    setSelected(null);
+                  }}
+                >
                   <Sparkles size={14} />Apply All Recommendations
                 </Button>
                 <Button variant="outline" size="md" onClick={() => setSelected(null)}>Close</Button>
